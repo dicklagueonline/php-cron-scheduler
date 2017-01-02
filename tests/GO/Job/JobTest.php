@@ -12,7 +12,7 @@ class JobTest extends \PHPUnit_Framework_TestCase
 
   public function testShouldSetFilesOutput()
   {
-    $files = ['file1', 'file2'];
+    $files = array('file1', 'file2');
 
     $job = JobFactory::factory('GO\Job\Php', 'some command')->output($files);
 
@@ -21,7 +21,7 @@ class JobTest extends \PHPUnit_Framework_TestCase
 
   public function testShouldSetEmailsOutput()
   {
-    $emails = ['email1', 'email2'];
+    $emails = array('email1', 'email2');
 
     $job = JobFactory::factory('GO\Job\Php', 'some command')->email($emails);
 
@@ -44,24 +44,24 @@ class JobTest extends \PHPUnit_Framework_TestCase
 
   public function testShouldRunInBackground()
   {
-    $job = JobFactory::factory('GO\Job\Php', 'some command')->output(['file1']);
+    $job = JobFactory::factory('GO\Job\Php', 'some command')->output(('file1'));
 
     $this->assertTrue($job->runInBackground);
   }
 
   public function testShouldRunInForeground()
   {
-    $job = JobFactory::factory('GO\Job\Php', 'some command')->email(['email1']);
+    $job = JobFactory::factory('GO\Job\Php', 'some command')->email(('email1'));
 
     $this->assertFalse($job->runInBackground);
   }
 
   public function testShouldAppendArgs()
   {
-    $args = [
+    $args = array(
       '--arg1' => 'value_arg 1',
-      '--arg2' => 'value_arg 2',
-    ];
+      '--arg2' => 'value_arg 2'
+    );
     $job = JobFactory::factory('GO\Job\Raw', 'somecommand', $args);
 
     $this->assertEquals('somecommand --arg1 "value_arg 1" --arg2 "value_arg 2" > /dev/null 2>&1 &', $job->build());
@@ -90,7 +90,7 @@ class JobTest extends \PHPUnit_Framework_TestCase
    */
   public function testShouldAcceptOnlyCallbackWithDoNotOverlap()
   {
-    $job = JobFactory::factory('GO\Job\Php', 'some command')->at('* * * * *')->doNotOverlap([1,2]);
+    $job = JobFactory::factory('GO\Job\Php', 'some command')->at('* * * * *')->doNotOverlap(array(1,2));
   }
 
   public function testShouldSetCallbackWithDoNotOverlap()

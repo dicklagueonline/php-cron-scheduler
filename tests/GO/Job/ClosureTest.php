@@ -14,7 +14,7 @@ class ClosureTest extends \PHPUnit_Framework_TestCase
     $closure = function ($nums) {
       return array_sum($nums);
     };
-    $args = [2, 3];
+    $args = array(2, 3);
     $job = JobFactory::factory('GO\Job\Closure', $closure, $args);
 
     $this->assertEquals(5, $job->exec());
@@ -25,7 +25,7 @@ class ClosureTest extends \PHPUnit_Framework_TestCase
     $closure = function ($nums) {
       return array_sum($nums);
     };
-    $args = [2, 3];
+      $args = array(2, 3);
     $job = JobFactory::factory('GO\Job\Closure', $closure, $args);
 
     $job->build();

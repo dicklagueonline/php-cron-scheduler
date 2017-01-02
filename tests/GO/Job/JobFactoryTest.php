@@ -5,7 +5,7 @@ use GO\Job\JobFactory;
 class JobFactoryTest extends \PHPUnit_Framework_TestCase
 {
   /**
-   * @expectedException GO\Job\Exceptions\InvalidFactoryException
+   * @expectedException \GO\Job\Exceptions\InvalidFactoryException
    */
   public function testShouldThrowExceptionIfClassIsInvalid()
   {

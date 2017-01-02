@@ -20,14 +20,14 @@ class Scheduler
    *
    * @var array of GO\Job\Job
    */
-  private $jobs = [];
+  private $jobs = array();
 
   /**
    * The executed jobs
    *
    * @var array of GO\Job\Job
    */
-  private $executed = [];
+  private $executed = array();
 
   /**
    * The scheduler start time
@@ -50,7 +50,7 @@ class Scheduler
    * @param array $config
    * @return void
    */
-  public function __construct(array $config = [])
+  public function __construct(array $config = array())
   {
     if (isset($config['tempDir']) &&
         (! is_dir($config['tempDir']) || ! is_writable($config['tempDir']))
@@ -134,9 +134,9 @@ class Scheduler
    * @param array $args
    * @return instance of GO\Job\Job
    */
-  public function php($command, array $args = [])
+  public function php($command, array $args = array())
   {
-    return $this->jobs[] = JobFactory::factory(\GO\Job\Php::class, $command, $args);
+    return $this->jobs[] = JobFactory::factory('\GO\Job\Php', $command, $args);
   }
 
   /**
@@ -148,7 +148,7 @@ class Scheduler
    * @param array $args
    * @return instance of GO\Job\Job
    */
-  private function command($command, array $args = [])
+  private function command($command, array $args = array())
   {
     $file = basename($command);
   }
@@ -161,7 +161,7 @@ class Scheduler
    */
   public function raw($command)
   {
-    return $this->jobs[] = JobFactory::factory(\GO\Job\Raw::class, $command);
+    return $this->jobs[] = JobFactory::factory('\GO\Job\Raw', $command);
   }
 
   /**
@@ -173,7 +173,7 @@ class Scheduler
   public function ping($command)
   {
     return false;
-    return $this->jobs[] = JobFactory::factory(\GO\Job\Ping::class, $command);
+    return $this->jobs[] = JobFactory::factory('\GO\Job\Ping', $command);
   }
 
   /**
@@ -184,7 +184,7 @@ class Scheduler
    */
   public function call($closure)
   {
-    return $this->jobs[] = JobFactory::factory(\GO\Job\Closure::class, $closure);
+    return $this->jobs[] = JobFactory::factory('\GO\Job\Closure', $closure);
   }
 
   /**
@@ -208,7 +208,7 @@ class Scheduler
    */
   public function run()
   {
-    $output = [];
+    $output = array();
 
     // First reorder the cronjobs
     $this->jobsInBackgroundFirst();
@@ -227,7 +227,7 @@ class Scheduler
           }
 
           // Create lock file for this job to prevent overlap
-          $lockFile = implode('/', [$this->getTempDir(), md5($job->getCommand()) . '.lock']);
+          $lockFile = implode('/', array($this->getTempDir(), md5($job->getCommand()) . '.lock'));
           Filesystem::write('', $lockFile);
           // Sets the file to remove after the execution
           $job->removeLockAfterExec($lockFile);
@@ -248,13 +248,13 @@ class Scheduler
    * If overlapping and a callback has been provided,
    * the result of that function will decide if the job can overlap.
    *
-   * @param GO\Job\Job $job
+   * @param \GO\Job\Job $job
    * @return bool
    */
   private function jobCanRun(\GO\Job\Job $job)
   {
     // Check if file exists, if not return true
-    $lockFile = implode('/', [$this->getTempDir(), md5($job->getCommand()) . '.lock']);
+    $lockFile = implode('/', array($this->getTempDir(), md5($job->getCommand()) . '.lock'));
     if (! file_exists($lockFile)) {
       return true;
     }
@@ -267,7 +267,7 @@ class Scheduler
     $filetime = filemtime($lockFile);
     $callback = $job->preventOverlap();
 
-    return ! $callback($filetime);
+    return is_callable($callback)? !$callback($filetime): !$callback;
   }
 
 }

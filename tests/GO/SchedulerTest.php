@@ -6,7 +6,7 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
 {
   public function testShouldLoadConfigOnConstruct()
   {
-    $config = ['test' => 'this is a test'];
+    $config = array('test' => 'this is a test');
     $scheduler = new Scheduler($config);
 
     $this->assertEquals($config, $scheduler->getConfig());
@@ -14,7 +14,7 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
 
   public function testShouldSwitchConfig()
   {
-    $config = ['test' => 'this is a test'];
+    $config = array('test' => 'this is a test');
     $scheduler = new Scheduler();
     $scheduler->useConfig($config);
 
@@ -77,9 +77,9 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
    */
   public function testShouldThrowExceptionIfTempDirNotExists()
   {
-    $scheduler = new Scheduler([
+    $scheduler = new Scheduler(array(
       'tempDir' => 'someinvalid/path'
-    ]);
+    ));
   }
 
   /**
@@ -90,16 +90,16 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
     $tempDir = __DIR__ . '/../non_writable/';
     chmod($tempDir, 0555);
 
-    $scheduler = new Scheduler([
+    $scheduler = new Scheduler(array(
       'tempDir' => $tempDir
-    ]);
+    ));
   }
 
   public function testShouldOverlapIfCallbackReturnsFalse()
   {
-    $scheduler = new Scheduler([
+    $scheduler = new Scheduler(array(
       'tempDir' => __DIR__ . '/../tmp'
-    ]);
+    ));
 
     $script = __DIR__.'/../test_overlap.php';
 
@@ -114,31 +114,31 @@ class SchedulerTest extends \PHPUnit_Framework_TestCase
 
   public function testShouldRemoveLockFileAfterRun()
   {
-    $scheduler = new Scheduler([
+    $scheduler = new Scheduler(array(
       'tempDir' => __DIR__ . '/../tmp'
-    ]);
+    ));
 
     $script = __DIR__.'/../test_overlap.php';
 
     $job = $scheduler->php($script)->at('* * * * *')->doNotOverlap();
 
     $scheduler->run();
-    $expectedFile = implode('/', [$scheduler->getTempDir(), md5($job->getCommand()) . '.lock']);
+    $expectedFile = implode('/', array($scheduler->getTempDir(), md5($job->getCommand()) . '.lock'));
 
     $this->assertTrue(! file_exists($expectedFile));
   }
 
   public function testShouldNotExecuteJobIfLockFileExists()
   {
-    $scheduler = new Scheduler([
+    $scheduler = new Scheduler(array(
       'tempDir' => __DIR__ . '/../tmp'
-    ]);
+    ));
 
     $script = __DIR__.'/../test_overlap.php';
 
     $job = $scheduler->php($script)->at('* * * * *')->doNotOverlap();
 
-    $path = implode('/', [$scheduler->getTempDir(), md5($job->getCommand()) . '.lock']);
+    $path = implode('/', array($scheduler->getTempDir(), md5($job->getCommand()) . '.lock'));
     touch($path);
 
     $scheduler->run();

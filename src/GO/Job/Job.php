@@ -53,21 +53,21 @@ abstract class Job implements LoggerAwareInterface
    *
    * @var array
    */
-  protected $outputs = [];
+  protected $outputs  = array();
 
   /**
    * The emails where the output has to be sent
    *
    * @var array
    */
-  private $emails = [];
+  private $emails  = array();
 
   /**
    * The email address used to send the email
    *
    * @var array
    */
-  private $emailFrom = ['cronjob@server.my' => 'My Email Server'];
+  private $emailFrom = array('cronjob@server.my' => 'My Email Server');
 
   /**
    * Instance of
@@ -121,7 +121,7 @@ abstract class Job implements LoggerAwareInterface
    * @param array $args
    * @return void
    */
-  public function __construct($job, array $args = [])
+  public function __construct($job, array $args  = array())
   {
     $this->time = time();
 
@@ -209,7 +209,7 @@ abstract class Job implements LoggerAwareInterface
    */
   public function output($output, $mode = false)
   {
-    $this->outputs = is_array($output) ? $output : [$output];
+    $this->outputs = is_array($output) ? $output : array($output);
 
     $this->mode = $mode === true ? 'a' : 'w';
 
@@ -234,7 +234,7 @@ abstract class Job implements LoggerAwareInterface
    */
   public function email($email)
   {
-    $this->emails = is_array($email) ? $email : [$email];
+    $this->emails = is_array($email) ? $email : array($email);
 
     $this->runInBackground = false;
 
@@ -330,7 +330,7 @@ abstract class Job implements LoggerAwareInterface
    */
   public function exec()
   {
-    $jobOutput = [];
+    $jobOutput  = array();
     $this->compiled = $this->build();
 
     if (is_callable($this->compiled)) {
@@ -485,7 +485,7 @@ abstract class Job implements LoggerAwareInterface
     }
 
     if ($this->jobDoneMessage !== null) {
-      $this->logger->info($this->getLogLabel(), [ $this->jobDoneMessage ]);
+      $this->logger->info($this->getLogLabel(), array($this->jobDoneMessage));
     }
   }
 

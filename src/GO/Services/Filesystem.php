@@ -66,7 +66,7 @@ class Filesystem
 
     $files = scandir($path);
 
-    $return = [];
+    $return = array();
 
     foreach ($files as $file) {
       if ($file == '.' || $file == '..') {

@@ -21,7 +21,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     {
         return $this
             ->getMockBuilder('Psr\Log\LoggerInterface')
-            ->setMethods([ 'emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug', 'log' ])
+            ->setMethods(array('emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug', 'log'))
             ->getMock();
     }
 
@@ -48,7 +48,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $loggerMock
             ->expects($this->once())
             ->method('info')
-            ->with('', [ 'testoutput1', 'testoutput2' ]);
+            ->with('', array('testoutput1', 'testoutput2'));
         
         $job->setLogger($loggerMock);
 
@@ -65,7 +65,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $loggerMock
             ->expects($this->once())
             ->method('info')
-            ->with('', [ 'closureoutput' ]);
+            ->with('', array('closureoutput'));
 
         $job->setLogger($loggerMock);
 
@@ -82,7 +82,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $loggerMock
             ->expects($this->once())
             ->method('info')
-            ->with('mylabel', [ 'closureoutput' ]);
+            ->with('mylabel', array('closureoutput'));
 
         $job->setLabel('mylabel')->setLogger($loggerMock);
 
@@ -99,11 +99,11 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $loggerMock
             ->expects($this->at(0))
             ->method('info')
-            ->with('', [ 'closureoutput' ]);
+            ->with('', array('closureoutput'));
         $loggerMock
             ->expects($this->at(1))
             ->method('info')
-            ->with('', [ 'job done' ]);
+            ->with('', array('job done'));
 
         $job->setJobDoneMessage('job done')->setLogger($loggerMock);
 
